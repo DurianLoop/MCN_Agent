@@ -5,6 +5,7 @@
 ## 交付物
 
 - 调研与方案报告：[report.md](report.md)
+- 转换后 Markdown 交付版：[output/final_delivery.md](output/final_delivery.md)
 - 最终脚本：[output/final_script.md](output/final_script.md)
 - 分镜设计：[output/storyboard.md](output/storyboard.md)
 - 合规质检：[output/risk_check.md](output/risk_check.md)
@@ -124,8 +125,8 @@ python .\feishu\write_to_feishu.py
 
 已通过 `feishu/write_to_feishu.py` 使用飞书 OpenAPI 自动写入：
 
-- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/LebhdCoMaoW3vGxasF2cpubPnzd
-- 多维表格：https://pcn395m6qii3.feishu.cn/base/A1cdbMGxVaRRU5sCB6UciR5ondh
+- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/Vx8TdSaAxoGPnlxZ1nNcBCKVnUc
+- 多维表格：https://pcn395m6qii3.feishu.cn/base/TuSBbiasta94GfscIcJcB72QnYe
 
 运行结果保存在本地 `feishu/result.json` 和 `feishu/feishu_links.md`，这两个文件包含租户内资源 token，默认不提交到 GitHub。
 

@@ -53,6 +53,11 @@ python .\feishu\write_to_feishu.py
 - 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/LebhdCoMaoW3vGxasF2cpubPnzd`
 - 多维表格：`https://pcn395m6qii3.feishu.cn/base/A1cdbMGxVaRRU5sCB6UciR5ondh`
 
+按“转换后的 Markdown 交付版”要求，新增 `output/final_delivery.md`，使用 Markdown 下划线标题、重点块、分层清单和分镜条目卡片，不再使用 `#` 标题或 Markdown 表格。新版飞书链接：
+
+- 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/Vx8TdSaAxoGPnlxZ1nNcBCKVnUc`
+- 多维表格：`https://pcn395m6qii3.feishu.cn/base/TuSBbiasta94GfscIcJcB72QnYe`
+
 ## 成功输出
 
 成功后脚本会生成：
