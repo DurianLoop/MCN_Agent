@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+.gitdir/
+.gitpush/
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+dist/
+build/
+feishu/result.json
+feishu/feishu_links.md
+feishu/dry_run_document.md
