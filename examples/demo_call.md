@@ -2,6 +2,8 @@
 
 这个示例展示如何把「轻醒」brief 输入到本地 MCN Agent demo，经过达人评分、风格拆解、脚本生成、分镜生成、合规扫描，得到可写入飞书的交付内容。
 
+注意：这个 demo 的目的不是证明“小红书近期内容已复核”，而是展示工具的调用方式和数据流。近期站内笔记复核需要登录态小红书或截图证据，详见 `references/xhs_research.md` 的“近期内容复核状态”。
+
 ## 1. 输入材料
 
 - Brief：`examples/qingxing_brief.json`
@@ -43,3 +45,5 @@ python .\tools\mcn_agent_demo.py `
 ## 5. 和真实 LLM Agent 的关系
 
 `tools/mcn_agent_demo.py` 是可复现演示层，用确定性逻辑展示工作流和数据结构。真实使用时，把 `prompts/advanced_agent_prompt.md` 交给 LLM，并把搜索、资料库、合规扫描、飞书写入作为工具接入即可。
+
+如果要做泛化测试，应新增一个不在当前候选列表中的近期活跃达人，重新生成 `creator_candidates.json`、`demo_result.md` 和 `demo_trace.json`，再比较最终脚本是否仍能保持自然植入。
