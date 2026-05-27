@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -117,6 +118,105 @@ def tenant_token() -> str:
     return str(resp["tenant_access_token"])
 
 
+def markdown_to_docx_blocks(markdown: str) -> list[dict[str, Any]]:
+    lines = markdown.splitlines()
+    blocks: list[dict[str, Any]] = []
+    i = 0
+
+    while i < len(lines):
+        line = lines[i].rstrip()
+        stripped = line.strip()
+
+        if not stripped:
+            i += 1
+            continue
+
+        next_line = lines[i + 1].strip() if i + 1 < len(lines) else ""
+        if is_setext_underline(next_line, "="):
+            blocks.append(rich_text_block(3, "heading1", stripped))
+            i += 2
+            continue
+        if is_setext_underline(next_line, "-"):
+            blocks.append(rich_text_block(4, "heading2", stripped))
+            i += 2
+            continue
+
+        if stripped.startswith(">"):
+            quote_lines = []
+            while i < len(lines) and lines[i].strip().startswith(">"):
+                quote_lines.append(lines[i].strip().lstrip("> "))
+                i += 1
+            blocks.append(rich_text_block(2, "text", "  ".join(quote_lines)))
+            continue
+
+        if stripped.startswith("- "):
+            blocks.append(rich_text_block(12, "bullet", stripped[2:]))
+            i += 1
+            continue
+
+        bold_heading = re.fullmatch(r"\*\*(.+?)\*\*", stripped)
+        if bold_heading:
+            blocks.append(rich_text_block(5, "heading3", bold_heading.group(1)))
+            i += 1
+            continue
+
+        blocks.append(rich_text_block(2, "text", stripped))
+        i += 1
+
+    return blocks
+
+
+def is_setext_underline(line: str, marker: str) -> bool:
+    return len(line) >= 3 and set(line) == {marker}
+
+
+def rich_text_block(block_type: int, key: str, content: str) -> dict[str, Any]:
+    return {
+        "block_type": block_type,
+        key: {
+            "elements": parse_inline_elements(content),
+            "style": {"align": 1, "folded": False},
+        },
+    }
+
+
+def parse_inline_elements(text: str) -> list[dict[str, Any]]:
+    elements: list[dict[str, Any]] = []
+    pattern = re.compile(r"(\*\*[^*]+\*\*|`[^`]+`)")
+    position = 0
+    for match in pattern.finditer(text):
+        if match.start() > position:
+            elements.append(text_run(text[position : match.start()]))
+        token = match.group(0)
+        if token.startswith("**"):
+            elements.append(text_run(token[2:-2], bold=True))
+        else:
+            elements.append(text_run(token[1:-1], inline_code=True))
+        position = match.end()
+    if position < len(text):
+        elements.append(text_run(text[position:]))
+    return [element for element in elements if element["text_run"]["content"]]
+
+
+def text_run(content: str, *, bold: bool = False, inline_code: bool = False) -> dict[str, Any]:
+    return {
+        "text_run": {
+            "content": content,
+            "text_element_style": {
+                "bold": bold,
+                "inline_code": inline_code,
+                "italic": False,
+                "strikethrough": False,
+                "underline": False,
+            },
+        }
+    }
+
+
+def batch_items(items: list[dict[str, Any]], size: int) -> list[list[dict[str, Any]]]:
+    return [items[index : index + size] for index in range(0, len(items), size)]
+
+
 def create_docx(token: str, markdown: str) -> dict[str, Any]:
     title = f"轻醒酸奶商单脚本交付-{time.strftime('%Y%m%d-%H%M')}"
     payload: dict[str, Any] = {"title": title}
@@ -134,7 +234,8 @@ def create_docx(token: str, markdown: str) -> dict[str, Any]:
         raise RuntimeError(f"Cannot find document_id in response: {created}")
 
     write_results = []
-    for chunk in chunk_text(markdown, 2500):
+    blocks = markdown_to_docx_blocks(markdown)
+    for block_batch in batch_items(blocks, 40):
         write_results.append(
             request_json(
                 "POST",
@@ -142,12 +243,7 @@ def create_docx(token: str, markdown: str) -> dict[str, Any]:
                 token,
                 {
                     "index": -1,
-                    "children": [
-                        {
-                            "block_type": 2,
-                            "text": {"elements": [{"text_run": {"content": chunk}}]},
-                        }
-                    ],
+                    "children": block_batch,
                 },
             )
         )

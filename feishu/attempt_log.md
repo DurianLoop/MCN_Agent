@@ -58,6 +58,11 @@ python .\feishu\write_to_feishu.py
 - 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/Vx8TdSaAxoGPnlxZ1nNcBCKVnUc`
 - 多维表格：`https://pcn395m6qii3.feishu.cn/base/TuSBbiasta94GfscIcJcB72QnYe`
 
+最终按飞书富文本块格式写入：`output/final_delivery.md` 作为源 Markdown，脚本将下划线标题解析为飞书 H1/H2，将粗体小节解析为 H3，将 `-` 列表解析为飞书无序列表块，将行内代码解析为 inline code。最终链接：
+
+- 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/V78bdIMy2os1iLxpzxPcDugtnpd`
+- 多维表格：`https://pcn395m6qii3.feishu.cn/base/GvGcbAQzFap1d7s7rE1cTLpdnAM`
+
 ## 成功输出
 
 成功后脚本会生成：

@@ -40,8 +40,8 @@ python .\tools\mcn_agent_demo.py `
 - 正式脚本：`output/final_script.md`
 - 正式分镜：`output/storyboard.md`
 - 正式质检：`output/risk_check.md`
-- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/Vx8TdSaAxoGPnlxZ1nNcBCKVnUc
-- 飞书多维表格：https://pcn395m6qii3.feishu.cn/base/TuSBbiasta94GfscIcJcB72QnYe
+- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/V78bdIMy2os1iLxpzxPcDugtnpd
+- 飞书多维表格：https://pcn395m6qii3.feishu.cn/base/GvGcbAQzFap1d7s7rE1cTLpdnAM
 
 ## 5. 和真实 LLM Agent 的关系
 

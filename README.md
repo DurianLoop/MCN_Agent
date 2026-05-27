@@ -125,8 +125,8 @@ python .\feishu\write_to_feishu.py
 
 已通过 `feishu/write_to_feishu.py` 使用飞书 OpenAPI 自动写入：
 
-- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/Vx8TdSaAxoGPnlxZ1nNcBCKVnUc
-- 多维表格：https://pcn395m6qii3.feishu.cn/base/TuSBbiasta94GfscIcJcB72QnYe
+- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/V78bdIMy2os1iLxpzxPcDugtnpd
+- 多维表格：https://pcn395m6qii3.feishu.cn/base/GvGcbAQzFap1d7s7rE1cTLpdnAM
 
 运行结果保存在本地 `feishu/result.json` 和 `feishu/feishu_links.md`，这两个文件包含租户内资源 token，默认不提交到 GitHub。
 
