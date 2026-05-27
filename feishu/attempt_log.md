@@ -48,6 +48,11 @@ python .\feishu\write_to_feishu.py
 - 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/GJCBdIxeHoiKEDx1qtbcI7SHnZe`
 - 多维表格：`https://pcn395m6qii3.feishu.cn/base/HadpbLwUGa1DbHsyjJmcv0Uunre`
 
+为避免飞书正文直接显示 Markdown 的 `#` 标题和 `|` 表格符号，已将写入脚本调整为阅读版纯文本格式：标题使用分隔线和编号，候选达人、分镜、合规检查表转为分层条目。阅读版最终链接：
+
+- 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/LebhdCoMaoW3vGxasF2cpubPnzd`
+- 多维表格：`https://pcn395m6qii3.feishu.cn/base/A1cdbMGxVaRRU5sCB6UciR5ondh`
+
 ## 成功输出
 
 成功后脚本会生成：

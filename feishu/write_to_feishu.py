@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -42,19 +43,178 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
-def build_document_markdown() -> str:
+def build_document_text() -> str:
     parts = [
         "# 轻醒酸奶小红书商单脚本交付",
-        "## 调研与方案报告",
+        "## 交付总览",
+        "- 交付对象：轻食酸奶品牌「轻醒」",
+        "- 最终达人：气泡苏打%",
+        "- 核心内容：沉浸式蓝莓黄桃星河酸奶碗",
+        "- 使用场景：下午茶 / 运动后加餐 / 视觉系酸奶碗",
+        "- 飞书写入方式：应用身份调用 OpenAPI 自动创建文档和多维表格",
         read_text(REPORT),
-        "## 最终脚本",
         read_text(OUTPUT_DIR / "final_script.md"),
-        "## 分镜设计",
         read_text(OUTPUT_DIR / "storyboard.md"),
-        "## 合规质检",
         read_text(OUTPUT_DIR / "risk_check.md"),
     ]
-    return "\n\n".join(parts) + "\n"
+    return format_for_feishu("\n\n".join(parts)) + "\n"
+
+
+def format_for_feishu(markdown: str) -> str:
+    """Convert Markdown into readable plain text for Feishu text blocks."""
+    lines = markdown.splitlines()
+    output: list[str] = []
+    h2_index = 0
+    h3_index = 0
+    i = 0
+
+    while i < len(lines):
+        line = lines[i].rstrip()
+        stripped = line.strip()
+
+        if not stripped:
+            if output and output[-1] != "":
+                output.append("")
+            i += 1
+            continue
+
+        if is_table_start(lines, i):
+            i = append_table(lines, i, output)
+            continue
+
+        heading = re.match(r"^(#{1,6})\s+(.+)$", stripped)
+        if heading:
+            level = len(heading.group(1))
+            title = strip_heading_number(strip_inline_markdown(heading.group(2)))
+            if level == 1:
+                output.extend([line_break(), f"【{title}】", line_break()])
+                h2_index = 0
+                h3_index = 0
+            elif level == 2:
+                h2_index += 1
+                h3_index = 0
+                output.extend(["", f"{to_chinese_number(h2_index)}、{title}"])
+            else:
+                h3_index += 1
+                output.extend(["", f"{h2_index}.{h3_index} {title}"])
+            i += 1
+            continue
+
+        if stripped.startswith(">"):
+            quote = strip_inline_markdown(stripped.lstrip("> "))
+            output.append(quote if quote.startswith("说明：") else "说明：" + quote)
+        elif stripped.startswith("- "):
+            output.append("• " + strip_inline_markdown(stripped[2:]))
+        else:
+            output.append(strip_inline_markdown(stripped))
+        i += 1
+
+    return "\n".join(trim_blank_lines(output))
+
+
+def is_table_start(lines: list[str], index: int) -> bool:
+    if index + 1 >= len(lines):
+        return False
+    current = lines[index].strip()
+    next_line = lines[index + 1].strip()
+    return current.startswith("|") and current.endswith("|") and bool(re.match(r"^\|[\s:\-|]+\|$", next_line))
+
+
+def append_table(lines: list[str], index: int, output: list[str]) -> int:
+    headers = split_table_row(lines[index])
+    i = index + 2
+    rows: list[list[str]] = []
+    while i < len(lines) and lines[i].strip().startswith("|") and lines[i].strip().endswith("|"):
+        rows.append(split_table_row(lines[i]))
+        i += 1
+
+    output.append("")
+    output.append(table_title(headers))
+    for row_index, row in enumerate(rows, start=1):
+        output.extend(format_table_row(headers, row, row_index))
+    output.append("")
+    return i
+
+
+def split_table_row(line: str) -> list[str]:
+    return [strip_inline_markdown(cell.strip()) for cell in line.strip().strip("|").split("|")]
+
+
+def table_title(headers: list[str]) -> str:
+    first = headers[0] if headers else ""
+    if first == "候选达人":
+        return "候选达人对比"
+    if first == "镜头":
+        return "分镜执行表"
+    if first == "检查项":
+        return "合规检查表"
+    return "表格记录"
+
+
+def format_table_row(headers: list[str], row: list[str], row_index: int) -> list[str]:
+    data = {header: strip_inline_markdown(cell) for header, cell in zip(headers, row)}
+
+    if "候选达人" in data:
+        return [
+            f"{row_index}. {data.get('候选达人', '')}",
+            f"   内容方向：{data.get('内容方向', '')}",
+            f"   粉丝画像：{data.get('粉丝画像判断', '')}",
+            f"   代表内容/结构：{data.get('代表内容/结构', '')}",
+            f"   匹配度：{data.get('匹配度', '')}",
+            f"   复核依据：{data.get('可复核链接', '')}",
+        ]
+
+    if "镜头" in data:
+        return [
+            f"镜头 {data.get('镜头', row_index)}｜{data.get('时长', '')}",
+            f"   画面：{data.get('画面', '')}",
+            f"   口播/字幕：{data.get('口播/字幕', '')}",
+            f"   产品露出：{data.get('产品露出', '')}",
+            f"   拍摄备注：{data.get('拍摄备注', '')}",
+        ]
+
+    if "检查项" in data:
+        return [
+            f"{row_index}. [{data.get('结论', '')}] {data.get('检查项', '')}",
+            f"   说明：{data.get('说明', '')}",
+            f"   处理：{data.get('处理', '')}",
+        ]
+
+    pairs = [f"{header}：{strip_inline_markdown(cell)}" for header, cell in zip(headers, row)]
+    return [f"{row_index}. " + "；".join(pairs)]
+
+
+def strip_heading_number(text: str) -> str:
+    return re.sub(r"^\d+[.、]\s*", "", text)
+
+
+def strip_inline_markdown(text: str) -> str:
+    text = re.sub(r"`([^`]+)`", r"\1", text)
+    text = re.sub(r"\*\*([^*]+)\*\*", r"\1", text)
+    text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
+    return text
+
+
+def to_chinese_number(value: int) -> str:
+    numbers = "零一二三四五六七八九十"
+    if value <= 10:
+        return numbers[value]
+    if value < 20:
+        return "十" + numbers[value - 10]
+    tens, ones = divmod(value, 10)
+    return numbers[tens] + "十" + (numbers[ones] if ones else "")
+
+
+def line_break() -> str:
+    return "━━━━━━━━━━━━━━━━━━━━"
+
+
+def trim_blank_lines(lines: list[str]) -> list[str]:
+    while lines and lines[0] == "":
+        lines.pop(0)
+    while lines and lines[-1] == "":
+        lines.pop()
+    return lines
 
 
 def build_bitable_records() -> list[dict[str, Any]]:
@@ -283,7 +443,7 @@ def main() -> int:
     args = parser.parse_args()
 
     load_env(ROOT / ".env")
-    markdown = build_document_markdown()
+    markdown = build_document_text()
     records = build_bitable_records()
 
     if args.dry_run:
