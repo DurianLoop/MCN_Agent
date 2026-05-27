@@ -1,5 +1,7 @@
 # MCN 商单脚本生成工作流 Prompt
 
+> 基础版 Prompt 适合人工逐步执行。若要做成 Agent 或工具调用流程，优先使用 [advanced_agent_prompt.md](advanced_agent_prompt.md)，其包含工具定义、结构化 JSON 输出、达人评分矩阵、合规守卫和飞书 payload。
+
 ## Prompt 1：Brief 拆解
 
 ```text

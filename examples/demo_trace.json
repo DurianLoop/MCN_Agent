@@ -1,0 +1,39 @@
+{
+  "steps": [
+    "load_brief",
+    "load_creator_candidates",
+    "score_creators",
+    "select_creator",
+    "generate_script",
+    "generate_storyboard",
+    "compliance_scan",
+    "prepare_feishu_payload"
+  ],
+  "selected_creator": "阿浪的早餐铺",
+  "ranked_scores": [
+    {
+      "creator_name": "阿浪的早餐铺",
+      "weighted_score": 5.0
+    },
+    {
+      "creator_name": "小名二姑娘",
+      "weighted_score": 4.12
+    },
+    {
+      "creator_name": "KiKi是琪琪呀",
+      "weighted_score": 3.7
+    }
+  ],
+  "risk_findings": [
+    {
+      "term": "0 蔗糖",
+      "risk": "low",
+      "action": "仅作为产品属性，需以包装为准。"
+    },
+    {
+      "term": "高蛋白",
+      "risk": "low",
+      "action": "仅作为产品属性，需以营养成分表为准。"
+    }
+  ]
+}

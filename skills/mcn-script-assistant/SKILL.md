@@ -23,13 +23,30 @@ If source access is limited, state the limitation and mark any judgement as infe
 ## Workflow
 
 1. Decompose the brief into product facts, audience pain points, content scenarios, usable claims, and banned claims.
-2. Screen 2-3 creators by persona fit, audience fit, scene fit, natural product insertion, and compliance risk.
+2. Load creator references from public sources or a structured candidate file, then screen 2-3 creators by persona fit, audience fit, scene fit, natural product insertion, execution feasibility, and compliance safety.
 3. Choose one creator and explain the choice with persona, scene, tone, and brand fit.
 4. Analyze creator style by hook type, first three seconds, shot order, captions, pacing, and CTA.
 5. Generate one script with title, opening hook,口播文案, product insertion point, ending CTA, and shooting notes.
 6. Produce a storyboard with shot, image,口播/字幕, product exposure, and拍摄备注.
 7. Run a risk check and rewrite any risky line before final handoff.
 8. Package final content as Markdown and structured records for Feishu.
+
+## Tool Pattern
+
+Prefer this tool chain when available:
+
+- `creator_reference_search`: collect profile paths, public citations, representative content, and access limitations.
+- `creator_scoring_matrix`: rank candidates with weighted scores for persona, audience, scene, insertion, feasibility, and compliance.
+- `compliance_guard`: scan claims, banned terms, absolute wording, meal-replacement implication, and shooting feasibility.
+- `feishu_writer`: write the final Markdown document and Bitable records through OpenAPI.
+
+For a deterministic local example, run:
+
+```powershell
+python .\tools\mcn_agent_demo.py --brief .\examples\qingxing_brief.json --creators .\references\creator_candidates.json
+```
+
+Use `examples/demo_result.md` and `examples/demo_trace.json` as the expected handoff shape.
 
 ## Output Format
 

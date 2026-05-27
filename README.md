@@ -11,6 +11,7 @@
 - Prompt 与工作流：[prompts/](prompts/)
 - 可复用 Skill：[skills/mcn-script-assistant/SKILL.md](skills/mcn-script-assistant/SKILL.md)
 - 飞书接入脚本：[feishu/write_to_feishu.py](feishu/write_to_feishu.py)
+- 端到端调用示例：[examples/demo_call.md](examples/demo_call.md)
 
 ## Brief 摘要
 
@@ -30,7 +31,37 @@
 5. 风险质检：检查功效承诺、夸大表达、硬广感、拍摄可执行性。
 6. 飞书写入：把最终脚本和达人调研自动写入飞书文档与多维表格。
 
-核心 Prompt 见 [prompts/workflow_prompts.md](prompts/workflow_prompts.md)。
+核心 Prompt 见 [prompts/workflow_prompts.md](prompts/workflow_prompts.md)。升级版 Agent Prompt 见 [prompts/advanced_agent_prompt.md](prompts/advanced_agent_prompt.md)，增加了工具调用、结构化 JSON 输出、达人评分矩阵、合规守卫和飞书写入 payload。
+
+## 一键示例
+
+本仓库提供一个本地可运行 demo，用来展示“如何调用这个工具、内部如何执行、最终输出什么”。它不依赖外部 LLM，使用确定性逻辑复现完整 Agent 数据流；真实业务中可把同样的输入和输出结构交给 LLM + 工具调用。
+
+```powershell
+python .\tools\mcn_agent_demo.py `
+  --brief .\examples\qingxing_brief.json `
+  --creators .\references\creator_candidates.json `
+  --out .\examples\demo_result.md `
+  --trace .\examples\demo_trace.json
+```
+
+运行后生成：
+
+- 示例结果：[examples/demo_result.md](examples/demo_result.md)
+- 流程 trace：[examples/demo_trace.json](examples/demo_trace.json)
+- 调用说明：[examples/demo_call.md](examples/demo_call.md)
+
+Demo 实现了 8 个步骤：读取 brief、读取达人资料库、加权评分、选择达人、生成脚本、生成分镜、合规扫描、准备飞书写入 payload。
+
+## 增强设计
+
+为了让交付不只是“文案生成”，本项目增加了几类必要工具层：
+
+- 结构化资料库：`references/creator_candidates.json` 把达人来源、内容方向、代表内容、风格结构和评分拆成机器可读数据。
+- 达人评分矩阵：按人设适配、受众适配、场景适配、植入自然度、拍摄可执行性、合规安全加权排序。
+- 合规守卫：`tools/mcn_agent_demo.py` 和 `output/risk_check.md` 都包含禁用表达与证据需求检查。
+- 飞书自动化：`feishu/write_to_feishu.py` 将 Markdown 文档与 Bitable records 写入飞书，而不是手动复制。
+- 可追踪过程：`examples/demo_trace.json` 记录每一步和最终选择，方便复盘与复现。
 
 ## 飞书接入
 

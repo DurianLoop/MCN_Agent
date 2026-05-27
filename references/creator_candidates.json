@@ -1,0 +1,62 @@
+[
+  {
+    "creator_name": "小名二姑娘",
+    "profile_or_source": "https://www.xiaohongshu.com/user/profile/1078135696；公开引用：Goody25、Cook1Cook",
+    "content_direction": "低卡餐、轻食、家常减脂餐",
+    "audience_inference": "女性用户、轻食/控糖/减脂餐兴趣用户、愿意照着做饭的人",
+    "representative_content": [
+      "日式土豆泥沙拉",
+      "燕麦盒子",
+      "低负担餐盘"
+    ],
+    "style_pattern": "成品吸引 -> 食材准备 -> 做法步骤 -> 口感/饱腹反馈",
+    "scores": {
+      "persona_fit": 4,
+      "audience_fit": 4,
+      "scene_fit": 4,
+      "natural_insertion": 4,
+      "execution_feasibility": 5,
+      "compliance_safety": 4
+    }
+  },
+  {
+    "creator_name": "阿浪的早餐铺",
+    "profile_or_source": "https://www.xiaohongshu.com/user/profile/186104158；公开引用：Goody25",
+    "content_direction": "早餐、燕麦盒子、宿舍/上班族快手餐",
+    "audience_inference": "上班族、学生党、早餐准备人群、轻食早餐用户",
+    "representative_content": [
+      "一周早餐不重样",
+      "燕麦盒子多口味组合",
+      "适合提前准备的快手早餐"
+    ],
+    "style_pattern": "早餐痛点 -> 一次准备/几分钟搞定 -> 多口味组合 -> 保存/食用建议",
+    "scores": {
+      "persona_fit": 5,
+      "audience_fit": 5,
+      "scene_fit": 5,
+      "natural_insertion": 5,
+      "execution_feasibility": 5,
+      "compliance_safety": 5
+    }
+  },
+  {
+    "creator_name": "KiKi是琪琪呀",
+    "profile_or_source": "https://www.xiaohongshu.com/search_result?keyword=KiKi%E6%98%AF%E7%90%AA%E7%90%AA%E5%91%80；公开引用：下厨房作者页",
+    "content_direction": "低脂健康餐、波奇饭、轻食餐盘",
+    "audience_inference": "喜欢健康食谱、拍照好看、低压力饮食的年轻女性",
+    "representative_content": [
+      "波奇饭",
+      "健康低脂餐盘",
+      "彩色食材组装"
+    ],
+    "style_pattern": "生活态度/无压力 -> 彩色食材 -> 简单组装 -> 轻盈但好吃",
+    "scores": {
+      "persona_fit": 4,
+      "audience_fit": 4,
+      "scene_fit": 3,
+      "natural_insertion": 3,
+      "execution_feasibility": 5,
+      "compliance_safety": 4
+    }
+  }
+]
