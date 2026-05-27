@@ -21,7 +21,7 @@
   },
   {
     "creator_name": "阿浪的早餐铺",
-    "profile_or_source": "https://www.xiaohongshu.com/user/profile/186104158；公开引用：Goody25",
+    "profile_or_source": "https://www.xiaohongshu.com/user/profile/186104158；公开引用：Goody25；登录态复核显示本人内容主要为 2020-2022",
     "content_direction": "早餐、燕麦盒子、宿舍/上班族快手餐",
     "audience_inference": "上班族、学生党、早餐准备人群、轻食早餐用户",
     "representative_content": [
@@ -31,12 +31,12 @@
     ],
     "style_pattern": "早餐痛点 -> 一次准备/几分钟搞定 -> 多口味组合 -> 保存/食用建议",
     "scores": {
-      "persona_fit": 5,
-      "audience_fit": 5,
-      "scene_fit": 5,
-      "natural_insertion": 5,
+      "persona_fit": 4,
+      "audience_fit": 4,
+      "scene_fit": 4,
+      "natural_insertion": 4,
       "execution_feasibility": 5,
-      "compliance_safety": 5
+      "compliance_safety": 4
     }
   },
   {
@@ -55,6 +55,26 @@
       "audience_fit": 4,
       "scene_fit": 3,
       "natural_insertion": 3,
+      "execution_feasibility": 5,
+      "compliance_safety": 4
+    }
+  },
+  {
+    "creator_name": "气泡苏打%",
+    "profile_or_source": "登录态复核：小红书号 601942776；粉丝 86.8 万；近期内容见 references/xhs_recent_verification.md",
+    "content_direction": "沉浸式饮品、酸奶碗、视觉系甜品",
+    "audience_inference": "喜欢高颜值饮品/甜品、酸奶碗、治愈系制作过程的年轻女性",
+    "representative_content": [
+      "沉浸式克莱因蓝星辰大海酸奶碗（4天前）",
+      "沉浸梦幻蓝紫星辰大海酸奶碗（05-03）",
+      "梦幻薄巧森林酸奶碗（04-25）"
+    ],
+    "style_pattern": "梦幻色彩命名 -> 极近景质地展示 -> 压拌/铺料 -> 少量字幕+轻 CTA",
+    "scores": {
+      "persona_fit": 5,
+      "audience_fit": 5,
+      "scene_fit": 5,
+      "natural_insertion": 5,
       "execution_feasibility": 5,
       "compliance_safety": 4
     }

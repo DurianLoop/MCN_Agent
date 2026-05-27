@@ -12,3 +12,5 @@ build/
 feishu/result.json
 feishu/feishu_links.md
 feishu/dry_run_document.md
+references/xhs_live_*.json
+references/screenshots/*.png

@@ -67,6 +67,32 @@ def compliance_scan(text: str, forbidden: list[str]) -> list[dict[str, str]]:
 def render_script(brief: dict[str, Any], creator: dict[str, Any]) -> str:
     brand = brief["brand"]
     product = brief["product"]
+    if "气泡苏打" in creator["creator_name"]:
+        return f"""标题：沉浸式蓝莓黄桃星河酸奶碗
+
+开头 3 秒：
+今天做一碗可以嚼着吃的蓝莓黄桃星河酸奶碗。
+
+口播/字幕文案：
+今天做一碗蓝莓黄桃星河酸奶碗。
+
+先用「{brand}」原味希腊酸奶打底，质地比普通酸奶更厚一点，压开的时候会有很绵密的纹理。
+
+这杯是 0 蔗糖高蛋白配方，拿来做酸奶碗刚好，不会一拌就变得水水的。
+
+蓝莓口味做蓝色层，黄桃口味做一点暖色过渡，再铺上燕麦、蓝莓和黄桃丁。
+
+下午想吃点甜的，或者运动后想补一点蛋白质，我会更愿意做这种低负担的酸奶碗。
+
+CTA：
+你们还想看什么颜色的酸奶碗？蓝莓、黄桃，还是做一个薄荷绿色？
+
+产品植入点：
+第 2 个镜头短露出「{brand}」原味包装；第 3 个镜头展示厚质地；第 4-5 个镜头用蓝莓/黄桃做颜色层。
+
+风格依据：
+参考 {creator["creator_name"]} 的“{creator["style_pattern"]}”结构，只借鉴内容结构和拍摄节奏，不照搬原文。
+"""
     return f"""标题：上班日不想空腹，也不想做复杂早餐
 
 开头 3 秒：
@@ -98,14 +124,14 @@ CTA：
 
 def render_storyboard() -> list[dict[str, str]]:
     return [
-        {"shot": "1", "visual": "手机闹钟、厨房台面、通勤包", "line": "早上只剩 5 分钟", "note": "痛点开场"},
-        {"shot": "2", "visual": "冰箱取出轻醒原味酸奶", "line": "不想空腹，也不想开火", "note": "自然露出包装"},
-        {"shot": "3", "visual": "舀起酸奶展示质地", "line": "0 蔗糖高蛋白，质地厚一点", "note": "属性表达，不说功效"},
-        {"shot": "4", "visual": "酸奶倒入碗中，加燕麦", "line": "拌燕麦刚好", "note": "俯拍步骤"},
-        {"shot": "5", "visual": "加入蓝莓和黄桃", "line": "蓝莓清爽，黄桃甜香", "note": "带出口味"},
-        {"shot": "6", "visual": "装入带盖杯，放到通勤包旁", "line": "出门直接带走", "note": "上班族场景"},
-        {"shot": "7", "visual": "工位或窗边吃一口", "line": "下午也可以当加餐", "note": "延展下午茶"},
-        {"shot": "8", "visual": "三种口味并排，成品 close-up", "line": "收藏这个搭配", "note": "轻 CTA"},
+        {"shot": "1", "visual": "白碗里一勺原味酸奶被压开", "line": "蓝莓黄桃星河酸奶碗", "note": "沉浸式极近景"},
+        {"shot": "2", "visual": "轻醒原味包装短暂入画", "line": "0 蔗糖高蛋白希腊酸奶打底", "note": "自然露出包装"},
+        {"shot": "3", "visual": "勺子铺平厚质地酸奶", "line": "质地厚一点", "note": "属性表达，不说功效"},
+        {"shot": "4", "visual": "蓝莓口味/蓝莓酱淋成蓝色层", "line": "蓝莓做星河蓝", "note": "颜色主题"},
+        {"shot": "5", "visual": "黄桃丁形成暖色点缀", "line": "黄桃加一点暖色", "note": "带出口味"},
+        {"shot": "6", "visual": "撒燕麦、坚果、蓝莓，轻压", "line": "慢慢混在一起", "note": "沉浸式压拌"},
+        {"shot": "7", "visual": "勺子挖开横截面", "line": "下午茶或运动后加餐", "note": "场景表达"},
+        {"shot": "8", "visual": "成品 close-up，字幕提问", "line": "想看什么颜色？", "note": "轻 CTA"},
     ]
 
 
@@ -145,7 +171,7 @@ def run(brief_path: Path, creators_path: Path, out_path: Path, trace_path: Path)
             ["达人", "方向", "加权分", "选择"],
         ),
         "## 3. 最终达人",
-        f"选择 **{selected['creator_name']}**，因为其早餐/燕麦盒子内容与轻醒酸奶的早餐、通勤、加餐场景最自然。",
+        f"选择 **{selected['creator_name']}**，因为其近期内容、视觉风格和酸奶碗场景与轻醒酸奶的自然植入最匹配。",
         "## 4. 生成脚本",
         script,
         "## 5. 分镜",
@@ -156,7 +182,7 @@ def run(brief_path: Path, creators_path: Path, out_path: Path, trace_path: Path)
         "将本 Markdown 与达人评分 records 交给 `feishu/write_to_feishu.py`，由 OpenAPI 写入飞书文档和多维表格。",
     ]
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text("\n\n".join(markdown) + "\n", encoding="utf-8")
+    out_path.write_text("\n\n".join(markdown) + "\n", encoding="utf-8", newline="\n")
     trace_path.write_text(
         json.dumps(
             {
@@ -181,6 +207,7 @@ def run(brief_path: Path, creators_path: Path, out_path: Path, trace_path: Path)
             indent=2,
         ),
         encoding="utf-8",
+        newline="\n",
     )
 
 

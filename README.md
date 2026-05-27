@@ -110,9 +110,9 @@ python .\feishu\write_to_feishu.py
 
 ## 调研说明
 
-小红书网页端公开访问经常受登录、反爬和地区策略影响。本项目只使用公开可访问页面、搜索结果和第三方公开引用进行调研，不伪造无法访问的截图。公开访问限制和核验路径记录在 [references/xhs_research.md](references/xhs_research.md)。
+小红书网页端公开访问经常受登录、反爬和地区策略影响。本项目先使用公开可访问页面、搜索结果和第三方公开引用进行初筛；随后在用户本机已登录小红书的 Chrome 中做只读复核，不进行点赞、收藏、评论、关注、私信或发布。
 
-当前报告中的代表内容不能等同于“已核验最近 30 天内的 2-3 条站内笔记”。近期内容复核需要登录态小红书或截图证据；本项目已在调研记录中明确这一限制，并给出后续复核字段。
+登录态复核后，原候选「阿浪的早餐铺」因近期本人内容不足，不再作为最终选择；正式脚本改为参考近期活跃达人「气泡苏打%」。核验路径、近期笔记和结论见 [references/xhs_recent_verification.md](references/xhs_recent_verification.md)，公开访问限制和初筛过程见 [references/xhs_research.md](references/xhs_research.md)。
 
 ## 使用的 AI 工具
 
@@ -124,8 +124,8 @@ python .\feishu\write_to_feishu.py
 
 已通过 `feishu/write_to_feishu.py` 使用飞书 OpenAPI 自动写入：
 
-- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/E4ZDdDZCro2dONxO8CPcmsHLn4b
-- 多维表格：https://pcn395m6qii3.feishu.cn/base/MmCebbXtYaxOX3scvn1c0RoQnRc
+- 飞书文档：https://pcn395m6qii3.feishu.cn/docx/GJCBdIxeHoiKEDx1qtbcI7SHnZe
+- 多维表格：https://pcn395m6qii3.feishu.cn/base/HadpbLwUGa1DbHsyjJmcv0Uunre
 
 运行结果保存在本地 `feishu/result.json` 和 `feishu/feishu_links.md`，这两个文件包含租户内资源 token，默认不提交到 GitHub。
 

@@ -9,14 +9,18 @@
     "compliance_scan",
     "prepare_feishu_payload"
   ],
-  "selected_creator": "阿浪的早餐铺",
+  "selected_creator": "气泡苏打%",
   "ranked_scores": [
     {
-      "creator_name": "阿浪的早餐铺",
-      "weighted_score": 5.0
+      "creator_name": "气泡苏打%",
+      "weighted_score": 4.9
     },
     {
       "creator_name": "小名二姑娘",
+      "weighted_score": 4.12
+    },
+    {
+      "creator_name": "阿浪的早餐铺",
       "weighted_score": 4.12
     },
     {

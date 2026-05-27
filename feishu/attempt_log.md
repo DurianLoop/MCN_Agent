@@ -12,7 +12,7 @@
 - dry-run 已生成文档 Markdown 和多维表格 records payload。
 - 已确认真实 `App Secret` 未写入仓库文件。
 
-## 当前环境限制
+## 早期环境限制
 
 在 Codex 当前沙箱中直接访问 `open.feishu.cn` 时，命令行请求返回连接拒绝；按流程申请外网提权后，自动权限审核两次超时，未能完成 live 写入。
 
@@ -33,10 +33,20 @@ $env:ALL_PROXY='http://127.0.0.1:7897'
 python .\feishu\write_to_feishu.py
 ```
 
-成功创建：
+首次成功创建：
 
 - 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/E4ZDdDZCro2dONxO8CPcmsHLn4b`
 - 多维表格：`https://pcn395m6qii3.feishu.cn/base/MmCebbXtYaxOX3scvn1c0RoQnRc`
+
+登录态复核小红书近期内容后，最终达人由「阿浪的早餐铺」调整为「气泡苏打%」，并再次写入新版飞书：
+
+- 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/FKQndr57Oo9Do8xuy66c14KMngh`
+- 多维表格：`https://pcn395m6qii3.feishu.cn/base/WS50bKM4PaQ3jAsutMZc2hEfnGb`
+
+最终质检文案修正后，再次写入最终版：
+
+- 飞书文档：`https://pcn395m6qii3.feishu.cn/docx/GJCBdIxeHoiKEDx1qtbcI7SHnZe`
+- 多维表格：`https://pcn395m6qii3.feishu.cn/base/HadpbLwUGa1DbHsyjJmcv0Uunre`
 
 ## 成功输出
 

@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FEISHU_DIR = ROOT / "feishu"
 OUTPUT_DIR = ROOT / "output"
 REPORT = ROOT / "report.md"
+CREATOR_CANDIDATES = ROOT / "references" / "creator_candidates.json"
 API_BASE = "https://open.feishu.cn/open-apis"
 
 
@@ -57,32 +58,40 @@ def build_document_markdown() -> str:
 
 
 def build_bitable_records() -> list[dict[str, Any]]:
-    return [
-        {
-            "达人昵称": "小名二姑娘",
-            "内容方向": "低卡餐、轻食、家常减脂餐",
-            "选择状态": "候选",
-            "匹配理由": "轻食餐盘和酸奶类食材适配，但早餐场景不如最终达人集中。",
-            "风险状态": "低",
-            "输出文件": "report.md",
-        },
-        {
-            "达人昵称": "阿浪的早餐铺",
-            "内容方向": "早餐、燕麦盒子、上班族快手餐",
-            "选择状态": "最终选择",
-            "匹配理由": "早餐/燕麦盒子场景与轻醒酸奶自然匹配，适合做低硬广感种草。",
-            "风险状态": "低",
-            "输出文件": "output/final_script.md",
-        },
-        {
-            "达人昵称": "KiKi是琪琪呀",
-            "内容方向": "低脂健康餐、波奇饭、轻食餐盘",
-            "选择状态": "候选",
-            "匹配理由": "健康轻食审美适配，但产品植入需要更多场景转换。",
-            "风险状态": "低",
-            "输出文件": "references/xhs_research.md",
-        },
-    ]
+    candidates = json.loads(CREATOR_CANDIDATES.read_text(encoding="utf-8"))
+    selected_name = max(candidates, key=creator_score)["creator_name"]
+    records = []
+    for creator in candidates:
+        is_selected = creator["creator_name"] == selected_name
+        representative = "、".join(creator.get("representative_content", [])[:2])
+        compliance = int(creator.get("scores", {}).get("compliance_safety", 0))
+        records.append(
+            {
+                "达人昵称": creator["creator_name"],
+                "内容方向": creator.get("content_direction", ""),
+                "选择状态": "最终选择" if is_selected else "候选",
+                "匹配理由": (
+                    f"{creator.get('style_pattern', '')}；"
+                    f"代表内容：{representative or '见调研报告'}。"
+                ),
+                "风险状态": "低" if compliance >= 4 else "中",
+                "输出文件": "output/final_script.md" if is_selected else "references/xhs_research.md",
+            }
+        )
+    return records
+
+
+def creator_score(creator: dict[str, Any]) -> float:
+    weights = {
+        "persona_fit": 0.2,
+        "audience_fit": 0.18,
+        "scene_fit": 0.2,
+        "natural_insertion": 0.2,
+        "execution_feasibility": 0.12,
+        "compliance_safety": 0.1,
+    }
+    scores = creator.get("scores", {})
+    return sum(float(scores.get(key, 0)) * weight for key, weight in weights.items())
 
 
 def request_json(method: str, path: str, token: str | None = None, payload: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -235,7 +244,11 @@ def create_bitable(token: str, records: list[dict[str, Any]]) -> dict[str, Any]:
 
 def write_outputs(result: dict[str, Any], markdown: str) -> None:
     FEISHU_DIR.mkdir(exist_ok=True)
-    (FEISHU_DIR / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    (FEISHU_DIR / "result.json").write_text(
+        json.dumps(result, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="\n",
+    )
     bitable_url = (
         result.get("bitable", {})
         .get("app", {})
@@ -259,8 +272,9 @@ def write_outputs(result: dict[str, Any], markdown: str) -> None:
     (FEISHU_DIR / "feishu_links.md").write_text(
         "# 飞书写入结果\n\n" + doc_line + "\n" + bitable_line + "\n",
         encoding="utf-8",
+        newline="\n",
     )
-    (FEISHU_DIR / "dry_run_document.md").write_text(markdown, encoding="utf-8")
+    (FEISHU_DIR / "dry_run_document.md").write_text(markdown, encoding="utf-8", newline="\n")
 
 
 def main() -> int:
